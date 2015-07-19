@@ -13,7 +13,7 @@ object Engine extends App {
   props.resultsDirectory(IDEPathHelper.resultsDirectory.toString())
   props.bodiesDirectory(IDEPathHelper.requestBodiesDirectory.toString())
   props.binariesDirectory(IDEPathHelper.binariesDirectory.toString())
-  props.simulationClass(classOf[LoadScenario].getName)
+  props.simulationClass(classOf[RedisScenario].getName)
 
   Gatling.fromMap(props.build)
 
