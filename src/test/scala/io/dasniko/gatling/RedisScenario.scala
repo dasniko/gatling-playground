@@ -12,7 +12,7 @@ class RedisScenario extends Simulation {
   val csvFeeder = csv("rediskeys.csv").random
 
   val httpConf = http
-    .baseURL("http://localhost:9000")
+    .baseURL("http://localhost:8080")
     .disableWarmUp
 
   val scn = scenario("BasicRedisSimulation")
@@ -20,16 +20,13 @@ class RedisScenario extends Simulation {
     .exec(
       http("redis_request")
       .post("/redis")
-      .body(StringBody("""{"application":"${app}","uid":"${uid}"}""")).asJSON
+      .body(StringBody("""{"application":"${app}","uid":"${uid}"}"""))
+      .asJSON
     )
 
   setUp(
     scn
-      .inject(rampUsers(10000) over (1))
-      .throttle(
-        jumpToRps(1000),
-        holdFor(10)
-      )
+      .inject(constantUsersPerSec(1000) during (10))
   )
     .protocols(httpConf)
     .assertions(
